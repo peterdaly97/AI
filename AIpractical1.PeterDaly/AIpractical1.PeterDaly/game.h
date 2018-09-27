@@ -18,7 +18,9 @@ public:
 
 
 	Player player = Player();
-	Triangle tri = Triangle();
+	Triangle wanderEnemy = Triangle();
+	Triangle seekEnemy = Triangle();
+	Triangle fleeEnemy = Triangle();
 	sf::RenderWindow m_window;
 
 private:

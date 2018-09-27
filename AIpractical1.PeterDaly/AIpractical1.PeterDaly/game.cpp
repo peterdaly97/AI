@@ -4,7 +4,7 @@ static sf::Int32 MS_PER_UPDATE = 10.0;
 
 
 Game::Game() : m_window(sf::VideoMode(2048, 1080), "AI") {
-	
+	fleeEnemy.m_position = sf::Vector2f(1000, 500);
 }
 
 Game::~Game() {
@@ -34,13 +34,21 @@ void Game::run() {
 void Game::update(sf::Time dt) {
 	
 	player.update(dt);
-	tri.update(player.m_position);
+	seekEnemy.seek(player.m_position);
+	seekEnemy.arrive();
+	seekEnemy.update();
+	wanderEnemy.wander();
+	wanderEnemy.update();
+	fleeEnemy.flee(player.m_position);
+	fleeEnemy.update();
 }
 
 void Game::render() {
 	m_window.clear();
 	player.render(m_window);
-	tri.render(m_window);
+	wanderEnemy.render(m_window);
+	seekEnemy.render(m_window);
+	fleeEnemy.render(m_window);
 	m_window.display();
 	
 }
