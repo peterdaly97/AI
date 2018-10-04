@@ -34,13 +34,9 @@ void Game::run() {
 void Game::update(sf::Time dt) {
 	
 	player.update(dt);
-	seekEnemy.seek(player.m_position);
-	seekEnemy.arrive();
-	seekEnemy.update();
-	wanderEnemy.wander();
-	wanderEnemy.update();
-	fleeEnemy.flee(player.m_position);
-	fleeEnemy.update();
+	seekEnemy.update(player.m_position);
+	wanderEnemy.update(player.m_position);
+	fleeEnemy.update(player.m_position);
 }
 
 void Game::render() {

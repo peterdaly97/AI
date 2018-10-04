@@ -1,17 +1,24 @@
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include "SFML/Graphics.hpp"
 #include <iostream>
 
-class Triangle
+enum behaviour
+{
+	PURSUE,
+	EVADE,
+	PATROL
+};
+
+class Enemy
 {
 public:
-	Triangle();
+	Enemy(behaviour behaviour);
 
-	~Triangle();
+	~Enemy();
 
-	void update();
+	void update(sf::Vector2f playerPos);
 	void render(sf::RenderWindow &window);
 
 	float getNewRotation(float rot, sf::Vector2f vel);
@@ -25,7 +32,7 @@ public:
 
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
-	
+
 	sf::Vector2f m_position;
 	sf::Vector2f m_velocity;
 	float m_rotation;
@@ -39,8 +46,9 @@ public:
 	const float TIME_TO_TARGET = 1.0f;
 
 private:
-
+	behaviour b;
 
 };
 
-#endif //!TRIANGLE_H
+#endif //!Enemy_H
+

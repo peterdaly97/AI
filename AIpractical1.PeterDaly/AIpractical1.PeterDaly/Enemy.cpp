@@ -1,6 +1,6 @@
-#include "Triangle.h"
+#include "Enemy.h"
 
-Triangle::Triangle()
+Enemy::Enemy(behaviour behaviour)
 {
 	srand(time(0));
 	m_texture.loadFromFile("alien.png");
@@ -17,26 +17,43 @@ Triangle::Triangle()
 
 	m_targetPos.x = rand() % 2048;
 	m_targetPos.y = rand() % 1080;
+	b = behaviour;
 }
 
 
 
-Triangle::~Triangle()
+Enemy::~Enemy()
 {
 }
 
-void Triangle::update()
+void Enemy::update(sf::Vector2f playerPos)
 {
 	m_position += m_velocity;
 	m_sprite.setPosition(m_position);
+
+	switch (b)
+	{
+	case PURSUE:
+		seek(playerPos);
+		arrive();
+		break;
+	case EVADE:
+		flee(playerPos);
+		break;
+	case PATROL:
+		wander();
+		break;
+	default:
+		break;
+	}
 }
 
-void Triangle::wander() {
+void Enemy::wander() {
 	m_velocity = m_targetPos - m_position;
 	startCalc();
 	m_rotation = m_rotation + (MAX_ROTATION * ((rand() % 1) - 1));
 	m_sprite.setRotation(m_rotation);
-	
+
 	m_velocity = sf::Vector2f(-std::sin(m_rotation), std::cos(m_rotation));
 	m_velocity *= MAX_FORWARD_SPEED;
 
@@ -46,7 +63,7 @@ void Triangle::wander() {
 	}
 }
 
-void Triangle::flee(sf::Vector2f playerPos) {
+void Enemy::flee(sf::Vector2f playerPos) {
 	m_velocity = m_position - playerPos;
 	startCalc();
 	m_sprite.setRotation(m_rotation);
@@ -55,7 +72,7 @@ void Triangle::flee(sf::Vector2f playerPos) {
 		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
 }
 
-void Triangle::seek(sf::Vector2f playerPos) {
+void Enemy::seek(sf::Vector2f playerPos) {
 	m_velocity = playerPos - m_position;
 	startCalc();
 	m_sprite.setRotation(m_rotation);
@@ -64,7 +81,7 @@ void Triangle::seek(sf::Vector2f playerPos) {
 		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
 }
 
-void Triangle::arrive() {
+void Enemy::arrive() {
 	m_velocity = sf::Vector2f(m_velocity.x / TIME_TO_TARGET, m_velocity.y / TIME_TO_TARGET);
 	if (mag(m_velocity) > MAX_FORWARD_SPEED) {
 		m_velocity = sf::Vector2f(m_velocity.x / mag(m_velocity), m_velocity.y / mag(m_velocity));
@@ -72,15 +89,15 @@ void Triangle::arrive() {
 	}
 	m_rotation = getNewRotation(m_rotation, m_velocity);
 	m_sprite.setRotation(m_rotation);
-	
+
 }
 
-void Triangle::render(sf::RenderWindow & window)
+void Enemy::render(sf::RenderWindow & window)
 {
 	window.draw(m_sprite);
 }
 
-float Triangle::getNewRotation(float rot, sf::Vector2f vel)
+float Enemy::getNewRotation(float rot, sf::Vector2f vel)
 {
 	if (mag(m_velocity) > 0.0) {
 		float rotation = std::atan2(-m_velocity.x, m_velocity.y) * (180 / 3.14159);
@@ -89,21 +106,21 @@ float Triangle::getNewRotation(float rot, sf::Vector2f vel)
 	else {
 		return rot;
 	}
-	
+
 }
 
-float Triangle::mag(sf::Vector2f v) {
+float Enemy::mag(sf::Vector2f v) {
 	return std::sqrt(v.x * v.x + v.y * v.y);
 }
 
-void Triangle::startCalc() {
+void Enemy::startCalc() {
 	float magnitude = mag(m_velocity);
 	m_velocity = sf::Vector2f(m_velocity.x / magnitude, m_velocity.y / magnitude);
 	m_velocity = m_velocity * m_speed;
 	m_rotation = getNewRotation(m_rotation, m_velocity);
 }
 
-float Triangle::dist(sf::Vector2f v1, sf::Vector2f v2) {
+float Enemy::dist(sf::Vector2f v1, sf::Vector2f v2) {
 	float dist = std::sqrt(((v1.x - v2.x) * (v1.x - v2.x)) + ((v1.y - v2.y) * (v1.y - v2.y)));
 	return dist;
 }

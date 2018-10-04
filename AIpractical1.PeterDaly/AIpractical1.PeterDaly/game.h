@@ -3,7 +3,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "Player.h"
-#include "Triangle.h"
+#include "Enemy.h"
 
 class Game
 {
@@ -18,9 +18,9 @@ public:
 
 
 	Player player = Player();
-	Triangle wanderEnemy = Triangle();
-	Triangle seekEnemy = Triangle();
-	Triangle fleeEnemy = Triangle();
+	Enemy wanderEnemy = Enemy(behaviour::PATROL);
+	Enemy seekEnemy = Enemy(behaviour::PURSUE);
+	Enemy fleeEnemy = Enemy(behaviour::EVADE);
 	sf::RenderWindow m_window;
 
 private:
