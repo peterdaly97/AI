@@ -13,7 +13,7 @@ public:
 	~Game();
 
 	void run();
-	void update(sf::Time dt);
+	void update();
 	void render();
 
 

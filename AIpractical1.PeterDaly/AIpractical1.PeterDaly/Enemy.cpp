@@ -9,7 +9,7 @@ Enemy::Enemy(behaviour behaviour)
 	m_sprite.setScale(0.05, 0.05);
 	m_sprite.setOrigin(m_sprite.getLocalBounds().width / 2, m_sprite.getLocalBounds().height / 2);
 
-	m_speed = 0.1;
+	m_speed = 1;
 	m_position = sf::Vector2f(50, 400);
 	m_velocity = sf::Vector2f(0, 0);
 	m_sprite.setPosition(m_position);
@@ -26,16 +26,18 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::update(sf::Vector2f playerPos)
+void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 {
 	m_position += m_velocity;
 	m_sprite.setPosition(m_position);
-
+	int scalar = 50;
+	playerVel = sf::Vector2f(playerVel.x * scalar, playerVel.y * scalar);
+	sf::Vector2f playerPursue = playerPos + playerVel;
 	switch (b)
 	{
 	case PURSUE:
-		seek(playerPos);
-		arrive();
+		//seek(playerPos);
+		arrive(playerPursue);
 		break;
 	case EVADE:
 		flee(playerPos);
@@ -51,12 +53,11 @@ void Enemy::update(sf::Vector2f playerPos)
 void Enemy::wander() {
 	m_velocity = m_targetPos - m_position;
 	startCalc();
-	m_rotation = m_rotation + (MAX_ROTATION * ((rand() % 1) - 1));
+	//m_rotation = m_rotation + (MAX_ROTATION * ((rand() % 1) - 1));
 	m_sprite.setRotation(m_rotation);
 
-	m_velocity = sf::Vector2f(-std::sin(m_rotation), std::cos(m_rotation));
 	m_velocity *= MAX_FORWARD_SPEED;
-
+	
 	if (dist(m_targetPos, m_position) < 10) {
 		m_targetPos.x = rand() % 2048;
 		m_targetPos.y = rand() % 1080;
@@ -81,7 +82,8 @@ void Enemy::seek(sf::Vector2f playerPos) {
 		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
 }
 
-void Enemy::arrive() {
+void Enemy::arrive(sf::Vector2f playerPos) {
+	m_velocity = playerPos - m_position;
 	m_velocity = sf::Vector2f(m_velocity.x / TIME_TO_TARGET, m_velocity.y / TIME_TO_TARGET);
 	if (mag(m_velocity) > MAX_FORWARD_SPEED) {
 		m_velocity = sf::Vector2f(m_velocity.x / mag(m_velocity), m_velocity.y / mag(m_velocity));
@@ -89,7 +91,7 @@ void Enemy::arrive() {
 	}
 	m_rotation = getNewRotation(m_rotation, m_velocity);
 	m_sprite.setRotation(m_rotation);
-
+	
 }
 
 void Enemy::render(sf::RenderWindow & window)

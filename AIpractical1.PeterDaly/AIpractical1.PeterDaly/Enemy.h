@@ -18,7 +18,7 @@ public:
 
 	~Enemy();
 
-	void update(sf::Vector2f playerPos);
+	void update(sf::Vector2f playerPos, sf::Vector2f playerVel);
 	void render(sf::RenderWindow &window);
 
 	float getNewRotation(float rot, sf::Vector2f vel);
@@ -28,7 +28,7 @@ public:
 	float mag(sf::Vector2f v);
 	void startCalc();
 	float dist(sf::Vector2f v1, sf::Vector2f v2);
-	void arrive();
+	void arrive(sf::Vector2f playerPos);
 
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
@@ -40,10 +40,10 @@ public:
 
 	const double DEG_TO_RAD = 3.14159 / 180.0f;
 	float m_speed;
-	const float MAX_FORWARD_SPEED = 0.1;
-	const float MAX_ROTATION = 10;
-	const float MAX_BACKWARD_SPEED = 0.5;
-	const float TIME_TO_TARGET = 1.0f;
+	const float MAX_FORWARD_SPEED = 5;
+	const float MAX_ROTATION = 1;
+	const float MAX_BACKWARD_SPEED = 5;
+	const float TIME_TO_TARGET = 80.0f;
 
 private:
 	behaviour b;

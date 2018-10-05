@@ -5,6 +5,7 @@ static sf::Int32 MS_PER_UPDATE = 10.0;
 
 Game::Game() : m_window(sf::VideoMode(2048, 1080), "AI") {
 	fleeEnemy.m_position = sf::Vector2f(1000, 500);
+	m_window.setFramerateLimit(60);
 }
 
 Game::~Game() {
@@ -12,31 +13,19 @@ Game::~Game() {
 }
 
 void Game::run() {
-	sf::Clock clock;
-	sf::Int32 lag = 0;
 
-	while (m_window.isOpen())
-	{
-		sf::Time dt = clock.restart();
-
-		lag += dt.asMilliseconds();
-
-		while (lag > MS_PER_UPDATE)
-		{
-			update(dt);
-			lag -= MS_PER_UPDATE;
-		}
-		update(dt);
+	while (m_window.isOpen()) {
+		update();
 		render();
 	}
 }
 
-void Game::update(sf::Time dt) {
+void Game::update() {
 	
-	player.update(dt);
-	seekEnemy.update(player.m_position);
-	wanderEnemy.update(player.m_position);
-	fleeEnemy.update(player.m_position);
+	player.update();
+	seekEnemy.update(player.m_position, player.m_velocity);
+	wanderEnemy.update(player.m_position, player.m_velocity);
+	fleeEnemy.update(player.m_position, player.m_velocity);
 }
 
 void Game::render() {
