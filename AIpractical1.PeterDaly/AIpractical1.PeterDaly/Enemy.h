@@ -3,6 +3,7 @@
 
 #include "SFML/Graphics.hpp"
 #include <iostream>
+#include "Player.h"
 
 enum behaviour
 {
@@ -29,6 +30,7 @@ public:
 	void startCalc();
 	float dist(sf::Vector2f v1, sf::Vector2f v2);
 	void arrive(sf::Vector2f playerPos);
+	bool avoid(sf::FloatRect player);
 
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
@@ -47,7 +49,10 @@ public:
 
 private:
 	behaviour b;
-
+	sf::Text m_text;
+	sf::Font m_font;
+	sf::CircleShape triangle;
+	float m_deviation;
 };
 
 #endif //!Enemy_H

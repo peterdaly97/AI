@@ -23,9 +23,13 @@ void Game::run() {
 void Game::update() {
 	
 	player.update();
+	rect = sf::FloatRect(player.m_position.x, player.m_position.y, player.m_sprite.getGlobalBounds().width * 0.5, player.m_sprite.getGlobalBounds().height * 0.5);
 	seekEnemy.update(player.m_position, player.m_velocity);
 	wanderEnemy.update(player.m_position, player.m_velocity);
 	fleeEnemy.update(player.m_position, player.m_velocity);
+	if (seekEnemy.avoid(rect)) {
+		std::cout << "Hit" << std::endl;
+	}
 }
 
 void Game::render() {

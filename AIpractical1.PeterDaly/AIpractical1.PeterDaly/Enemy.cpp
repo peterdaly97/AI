@@ -18,6 +18,33 @@ Enemy::Enemy(behaviour behaviour)
 	m_targetPos.x = rand() % 2048;
 	m_targetPos.y = rand() % 1080;
 	b = behaviour;
+
+	if (!m_font.loadFromFile("arial.ttf"))	// Checks to make sure font is correct
+	{
+		std::cout << "Problem loading font file!" << std::endl;
+	}
+	m_text.setFont(m_font);
+	m_text.setFillColor(sf::Color::White);
+	switch (b)
+	{
+	case PURSUE:
+		m_text.setString("Pursue");
+		break;
+	case EVADE:
+		m_text.setString("Evade");
+		break;
+	case PATROL:
+		m_text.setString("Patrol");
+		break;
+	default:
+		break;
+	}
+	m_text.setOrigin(m_text.getLocalBounds().width / 2, m_text.getLocalBounds().height / 2);
+
+	triangle = sf::CircleShape(80, 3);
+	triangle.setFillColor(sf::Color::White);
+	triangle.setOrigin(triangle.getLocalBounds().width / 2, triangle.getLocalBounds().height / 2 - 100);
+	m_deviation = 0;
 }
 
 
@@ -48,6 +75,9 @@ void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 	default:
 		break;
 	}
+	m_text.setPosition(m_position);
+	triangle.setRotation(m_rotation - 90);
+	triangle.setPosition(m_position.x, m_position.y);
 }
 
 void Enemy::wander() {
@@ -94,9 +124,25 @@ void Enemy::arrive(sf::Vector2f playerPos) {
 	
 }
 
+bool Enemy::avoid(sf::FloatRect player)
+{
+	if (triangle.getGlobalBounds().intersects(player)) {
+		
+		return true;
+	}
+	else {
+		
+		return false;
+	}
+		
+	
+}
+
 void Enemy::render(sf::RenderWindow & window)
 {
 	window.draw(m_sprite);
+	window.draw(m_text);
+	window.draw(triangle);
 }
 
 float Enemy::getNewRotation(float rot, sf::Vector2f vel)

@@ -24,7 +24,7 @@ public:
 	sf::RenderWindow m_window;
 
 private:
-
+	sf::FloatRect rect;
 
 };
 
