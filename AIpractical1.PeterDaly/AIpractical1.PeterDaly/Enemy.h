@@ -30,7 +30,7 @@ public:
 	void startCalc();
 	float dist(sf::Vector2f v1, sf::Vector2f v2);
 	void arrive(sf::Vector2f playerPos);
-	bool avoid(sf::FloatRect player);
+	bool avoid(std::vector<sf::Vector2f *> enemies);
 
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
@@ -41,18 +41,23 @@ public:
 	sf::Vector2f m_targetPos;
 
 	const double DEG_TO_RAD = 3.14159 / 180.0f;
+	const double RAD_TO_DEG = 180.0f / 3.14159;
 	float m_speed;
-	const float MAX_FORWARD_SPEED = 5;
+	const float MAX_FORWARD_SPEED = 2.5;
 	const float MAX_ROTATION = 1;
-	const float MAX_BACKWARD_SPEED = 5;
+	const float MAX_BACKWARD_SPEED = 2.5;
 	const float TIME_TO_TARGET = 80.0f;
 
 private:
 	behaviour b;
 	sf::Text m_text;
 	sf::Font m_font;
-	sf::CircleShape triangle;
-	float m_deviation;
+	sf::CircleShape m_cone;
+
+	float detectedColl = 0.0f;
+	bool detected = false;
+	sf::Vector2f detectedVec;
+	behaviour original;
 };
 
 #endif //!Enemy_H

@@ -1,4 +1,4 @@
-#include "Enemy.h"
+﻿#include "Enemy.h"
 
 Enemy::Enemy(behaviour behaviour)
 {
@@ -9,15 +9,16 @@ Enemy::Enemy(behaviour behaviour)
 	m_sprite.setScale(0.05, 0.05);
 	m_sprite.setOrigin(m_sprite.getLocalBounds().width / 2, m_sprite.getLocalBounds().height / 2);
 
-	m_speed = 1;
+	m_speed = 2.5;
 	m_position = sf::Vector2f(50, 400);
-	m_velocity = sf::Vector2f(0, 0);
+	m_velocity = sf::Vector2f(0.1, 0);
 	m_sprite.setPosition(m_position);
 	m_rotation = 0;
 
 	m_targetPos.x = rand() % 2048;
 	m_targetPos.y = rand() % 1080;
 	b = behaviour;
+	original = behaviour;
 
 	if (!m_font.loadFromFile("arial.ttf"))	// Checks to make sure font is correct
 	{
@@ -41,10 +42,9 @@ Enemy::Enemy(behaviour behaviour)
 	}
 	m_text.setOrigin(m_text.getLocalBounds().width / 2, m_text.getLocalBounds().height / 2);
 
-	triangle = sf::CircleShape(80, 3);
-	triangle.setFillColor(sf::Color::White);
-	triangle.setOrigin(triangle.getLocalBounds().width / 2, triangle.getLocalBounds().height / 2 - 100);
-	m_deviation = 0;
+	m_cone = sf::CircleShape(150);
+	m_cone.setFillColor(sf::Color(255,255,255, 80));
+	m_cone.setOrigin(m_cone.getLocalBounds().width / 2, m_cone.getLocalBounds().height / 2);
 }
 
 
@@ -57,17 +57,30 @@ void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 {
 	m_position += m_velocity;
 	m_sprite.setPosition(m_position);
-	int scalar = 50;
+	int scalar = 30;
+
 	playerVel = sf::Vector2f(playerVel.x * scalar, playerVel.y * scalar);
 	sf::Vector2f playerPursue = playerPos + playerVel;
+
 	switch (b)
 	{
 	case PURSUE:
-		//seek(playerPos);
-		arrive(playerPursue);
+		seek(playerPursue);
+		//arrive(playerPursue);
 		break;
 	case EVADE:
-		flee(playerPos);
+		if (detected) {
+			detectedColl++;
+			flee(detectedVec);
+			if (detectedColl >= 120) {
+				b = original;
+				detected = false;
+				detectedColl = 0;
+			}
+		}
+		else {
+			flee(playerPos);
+		}
 		break;
 	case PATROL:
 		wander();
@@ -75,9 +88,9 @@ void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 	default:
 		break;
 	}
+
 	m_text.setPosition(m_position);
-	triangle.setRotation(m_rotation - 90);
-	triangle.setPosition(m_position.x, m_position.y);
+	m_cone.setPosition(m_position.x, m_position.y);
 }
 
 void Enemy::wander() {
@@ -124,25 +137,44 @@ void Enemy::arrive(sf::Vector2f playerPos) {
 	
 }
 
-bool Enemy::avoid(sf::FloatRect player)
+bool Enemy::avoid(std::vector<sf::Vector2f *> enemies)
 {
-	if (triangle.getGlobalBounds().intersects(player)) {
-		
-		return true;
+	for (sf::Vector2f * enemy : enemies) {
+		if (mag(m_position - *enemy) < m_cone.getRadius() && *enemy != m_position) {
+			sf::Vector2f realVelPos = m_velocity + m_position;
+
+			// C = m_position A = m_velocity B = Player Pos
+			double Dir_C_to_A = atan2(realVelPos.y - m_position.y, realVelPos.x - m_position.x);
+			double Dir_C_to_B = atan2(enemy->y - m_position.y, enemy->x - m_position.x);
+			double Angle_ACB = Dir_C_to_A - Dir_C_to_B;
+
+			// Handle wrap around
+			const double Pi = acos(-1);
+			if (Angle_ACB > Pi) Angle_ACB -= 2 * Pi;
+			else if (Angle_ACB < -Pi) Angle_ACB += 2 * Pi;
+
+			float angle = Angle_ACB;
+			angle = angle * RAD_TO_DEG;
+
+			if (angle < 45 && angle > -45) {
+				b = behaviour::EVADE;
+				detectedVec = *enemy;
+				detected = true;
+				return true;
+			}
+			else
+				return false;
+		}
 	}
-	else {
-		
-		return false;
-	}
-		
-	
+	return false;
 }
+
 
 void Enemy::render(sf::RenderWindow & window)
 {
 	window.draw(m_sprite);
 	window.draw(m_text);
-	window.draw(triangle);
+	window.draw(m_cone);
 }
 
 float Enemy::getNewRotation(float rot, sf::Vector2f vel)
@@ -162,10 +194,14 @@ float Enemy::mag(sf::Vector2f v) {
 }
 
 void Enemy::startCalc() {
-	float magnitude = mag(m_velocity);
-	m_velocity = sf::Vector2f(m_velocity.x / magnitude, m_velocity.y / magnitude);
-	m_velocity = m_velocity * m_speed;
-	m_rotation = getNewRotation(m_rotation, m_velocity);
+	if (m_velocity.x != 0 || m_velocity.y != 0)
+	{
+		float magnitude = mag(m_velocity);
+		m_velocity = sf::Vector2f(m_velocity.x / magnitude, m_velocity.y / magnitude);
+		m_velocity = m_velocity * m_speed;
+		m_rotation = getNewRotation(m_rotation, m_velocity);
+	}
+	
 }
 
 float Enemy::dist(sf::Vector2f v1, sf::Vector2f v2) {
