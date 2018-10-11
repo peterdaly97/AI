@@ -9,7 +9,8 @@ enum behaviour
 {
 	PURSUE,
 	EVADE,
-	PATROL
+	PATROL,
+	ARRIVE
 };
 
 class Enemy
@@ -43,8 +44,8 @@ public:
 	const double DEG_TO_RAD = 3.14159 / 180.0f;
 	const double RAD_TO_DEG = 180.0f / 3.14159;
 	float m_speed;
-	const float MAX_FORWARD_SPEED = 2.5;
-	const float MAX_ROTATION = 1;
+	float MAX_FORWARD_SPEED = 2.5;
+	const float MAX_ROTATION = 45;
 	const float MAX_BACKWARD_SPEED = 2.5;
 	const float TIME_TO_TARGET = 80.0f;
 
@@ -54,10 +55,13 @@ private:
 	sf::Font m_font;
 	sf::CircleShape m_cone;
 
-	float detectedColl = 0.0f;
-	bool detected = false;
-	sf::Vector2f detectedVec;
-	behaviour original;
+	float m_detectedColl = 0.0f;
+	bool m_detected = false;
+	sf::Vector2f m_detectedVec;
+	behaviour m_original;
+
+	float m_angleDev = 0.0f;
+	float m_changeAngle = 1.0f;
 };
 
 #endif //!Enemy_H

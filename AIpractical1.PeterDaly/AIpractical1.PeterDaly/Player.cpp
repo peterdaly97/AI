@@ -8,7 +8,7 @@ Player::Player()
 	m_sprite.setScale(0.5, 0.5);
 	m_sprite.setOrigin(m_sprite.getLocalBounds().width / 2, m_sprite.getLocalBounds().height / 2);
 
-	m_position = sf::Vector2f(1000, 400);
+	m_position = sf::Vector2f(1900, 1000);
 	m_velocity = sf::Vector2f(0, 0);
 	m_sprite.setPosition(m_position);
 	m_rotation = 0;
@@ -49,10 +49,10 @@ void Player::update()
 	
 	m_speed *= 0.999;
 
-	if (m_position.y > 1280) {
+	if (m_position.y > 2160) {
 		m_position.y = 0 - (m_sprite.getLocalBounds().height * 0.5);
 	}
-	else if (m_position.x > 2248) {
+	else if (m_position.x > 3840) {
 		m_position.x = 0 - (m_sprite.getLocalBounds().width * 0.5);
 	}
 	else if (m_position.y < -200) {

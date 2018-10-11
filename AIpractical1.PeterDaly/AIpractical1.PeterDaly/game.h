@@ -21,6 +21,8 @@ public:
 	Enemy wanderEnemy = Enemy(behaviour::PATROL);
 	Enemy seekEnemy = Enemy(behaviour::PURSUE);
 	Enemy fleeEnemy = Enemy(behaviour::EVADE);
+	Enemy arriveEnemySlow = Enemy(behaviour::ARRIVE);
+	Enemy arriveEnemyFast = Enemy(behaviour::ARRIVE);
 	sf::RenderWindow m_window;
 
 private:

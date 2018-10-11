@@ -18,7 +18,7 @@ Enemy::Enemy(behaviour behaviour)
 	m_targetPos.x = rand() % 2048;
 	m_targetPos.y = rand() % 1080;
 	b = behaviour;
-	original = behaviour;
+	m_original = behaviour;
 
 	if (!m_font.loadFromFile("arial.ttf"))	// Checks to make sure font is correct
 	{
@@ -26,20 +26,6 @@ Enemy::Enemy(behaviour behaviour)
 	}
 	m_text.setFont(m_font);
 	m_text.setFillColor(sf::Color::White);
-	switch (b)
-	{
-	case PURSUE:
-		m_text.setString("Pursue");
-		break;
-	case EVADE:
-		m_text.setString("Evade");
-		break;
-	case PATROL:
-		m_text.setString("Patrol");
-		break;
-	default:
-		break;
-	}
 	m_text.setOrigin(m_text.getLocalBounds().width / 2, m_text.getLocalBounds().height / 2);
 
 	m_cone = sf::CircleShape(150);
@@ -65,17 +51,19 @@ void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 	switch (b)
 	{
 	case PURSUE:
+		m_text.setString("Pursue");
 		seek(playerPursue);
 		//arrive(playerPursue);
 		break;
 	case EVADE:
-		if (detected) {
-			detectedColl++;
-			flee(detectedVec);
-			if (detectedColl >= 120) {
-				b = original;
-				detected = false;
-				detectedColl = 0;
+		m_text.setString("Evade");
+		if (m_detected) {
+			m_detectedColl++;
+			flee(m_detectedVec);
+			if (m_detectedColl >= 120) {
+				b = m_original;
+				m_detected = false;
+				m_detectedColl = 0;
 			}
 		}
 		else {
@@ -83,7 +71,12 @@ void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 		}
 		break;
 	case PATROL:
+		m_text.setString("Patrol");
 		wander();
+		break;
+	case ARRIVE:
+		m_text.setString("Arrive");
+		arrive(playerPos);
 		break;
 	default:
 		break;
@@ -97,13 +90,21 @@ void Enemy::wander() {
 	m_velocity = m_targetPos - m_position;
 	startCalc();
 	//m_rotation = m_rotation + (MAX_ROTATION * ((rand() % 1) - 1));
+
+	m_angleDev += m_changeAngle;
+	m_rotation += m_angleDev;
+	if (m_angleDev > MAX_ROTATION || m_angleDev < -MAX_ROTATION) {
+		m_changeAngle *= -1;
+	}
 	m_sprite.setRotation(m_rotation);
 
-	m_velocity *= MAX_FORWARD_SPEED;
+
+	m_position = sf::Vector2f(m_position.x + std::cos(DEG_TO_RAD  * (m_rotation)) * m_speed,
+		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
 	
 	if (dist(m_targetPos, m_position) < 10) {
-		m_targetPos.x = rand() % 2048;
-		m_targetPos.y = rand() % 1080;
+		m_targetPos.x = rand() % 3840;
+		m_targetPos.y = rand() % 2160;
 	}
 }
 
@@ -158,8 +159,8 @@ bool Enemy::avoid(std::vector<sf::Vector2f *> enemies)
 
 			if (angle < 45 && angle > -45) {
 				b = behaviour::EVADE;
-				detectedVec = *enemy;
-				detected = true;
+				m_detectedVec = *enemy;
+				m_detected = true;
 				return true;
 			}
 			else
