@@ -10,13 +10,19 @@ enum behaviour
 	PURSUE,
 	EVADE,
 	PATROL,
-	ARRIVE
+	ARRIVE,
+	SEEK
+};
+
+struct steering { 
+	sf::Vector2f linear; 
+	float angular; 
 };
 
 class Enemy
 {
 public:
-	Enemy(behaviour behaviour);
+	Enemy(behaviour behaviour, sf::Vector2f pos, float maxSpeed);
 
 	~Enemy();
 
@@ -24,13 +30,13 @@ public:
 	void render(sf::RenderWindow &window);
 
 	float getNewRotation(float rot, sf::Vector2f vel);
-	void wander();
-	void seek(sf::Vector2f playerPos);
-	void flee(sf::Vector2f playerPos);
+	steering wander();
+	steering seek(sf::Vector2f playerPos);
+	steering flee(sf::Vector2f playerPos);
 	float mag(sf::Vector2f v);
 	void startCalc();
 	float dist(sf::Vector2f v1, sf::Vector2f v2);
-	void arrive(sf::Vector2f playerPos);
+	steering arrive(sf::Vector2f playerPos);
 	bool avoid(std::vector<sf::Vector2f *> enemies);
 
 	sf::Texture m_texture;
@@ -62,6 +68,7 @@ private:
 
 	float m_angleDev = 0.0f;
 	float m_changeAngle = 1.0f;
+	steering steer;
 };
 
 #endif //!Enemy_H

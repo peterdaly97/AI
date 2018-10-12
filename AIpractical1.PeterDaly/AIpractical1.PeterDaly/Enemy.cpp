@@ -1,19 +1,16 @@
 ﻿#include "Enemy.h"
 
-Enemy::Enemy(behaviour behaviour)
+Enemy::Enemy(behaviour behaviour, sf::Vector2f pos, float maxSpeed)
 {
 	srand(time(0));
 	m_texture.loadFromFile("alien.png");
 	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(1000, 400);
+	m_position = pos;
+	MAX_FORWARD_SPEED = maxSpeed;
 	m_sprite.setScale(0.05, 0.05);
 	m_sprite.setOrigin(m_sprite.getLocalBounds().width / 2, m_sprite.getLocalBounds().height / 2);
 
 	m_speed = 2.5;
-	m_position = sf::Vector2f(50, 400);
-	m_velocity = sf::Vector2f(0.1, 0);
-	m_sprite.setPosition(m_position);
-	m_rotation = 0;
 
 	m_targetPos.x = rand() % 2048;
 	m_targetPos.y = rand() % 1080;
@@ -41,10 +38,9 @@ Enemy::~Enemy()
 
 void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 {
-	m_position += m_velocity;
-	m_sprite.setPosition(m_position);
+	
+	
 	int scalar = 30;
-
 	playerVel = sf::Vector2f(playerVel.x * scalar, playerVel.y * scalar);
 	sf::Vector2f playerPursue = playerPos + playerVel;
 
@@ -52,14 +48,17 @@ void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 	{
 	case PURSUE:
 		m_text.setString("Pursue");
-		seek(playerPursue);
-		//arrive(playerPursue);
+		steer = seek(playerPursue);
+		break;
+	case SEEK:
+		m_text.setString("Seek");
+		steer = seek(playerPos);
 		break;
 	case EVADE:
 		m_text.setString("Evade");
 		if (m_detected) {
 			m_detectedColl++;
-			flee(m_detectedVec);
+			steer = flee(m_detectedVec);
 			if (m_detectedColl >= 120) {
 				b = m_original;
 				m_detected = false;
@@ -67,26 +66,30 @@ void Enemy::update(sf::Vector2f playerPos, sf::Vector2f playerVel)
 			}
 		}
 		else {
-			flee(playerPos);
+			steer = flee(playerPos);
 		}
 		break;
 	case PATROL:
 		m_text.setString("Patrol");
-		wander();
+		steer = wander();
 		break;
 	case ARRIVE:
 		m_text.setString("Arrive");
-		arrive(playerPos);
+		steer = arrive(playerPos);
 		break;
 	default:
 		break;
 	}
+	m_position += steer.linear;
+	m_sprite.setPosition(m_position);
 
+	m_position = sf::Vector2f(m_position.x + std::cos(DEG_TO_RAD  * (m_rotation)) * m_speed,
+		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
 	m_text.setPosition(m_position);
 	m_cone.setPosition(m_position.x, m_position.y);
 }
 
-void Enemy::wander() {
+steering Enemy::wander() {
 	m_velocity = m_targetPos - m_position;
 	startCalc();
 	//m_rotation = m_rotation + (MAX_ROTATION * ((rand() % 1) - 1));
@@ -97,36 +100,42 @@ void Enemy::wander() {
 		m_changeAngle *= -1;
 	}
 	m_sprite.setRotation(m_rotation);
-
-
-	m_position = sf::Vector2f(m_position.x + std::cos(DEG_TO_RAD  * (m_rotation)) * m_speed,
-		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
 	
 	if (dist(m_targetPos, m_position) < 10) {
 		m_targetPos.x = rand() % 3840;
 		m_targetPos.y = rand() % 2160;
 	}
+
+	steering wanderSteer;
+	wanderSteer.linear = m_velocity;
+	wanderSteer.angular = 0.0;
+	return wanderSteer;
 }
 
-void Enemy::flee(sf::Vector2f playerPos) {
+steering Enemy::flee(sf::Vector2f playerPos) {
 	m_velocity = m_position - playerPos;
 	startCalc();
 	m_sprite.setRotation(m_rotation);
 
-	m_position = sf::Vector2f(m_position.x + std::cos(DEG_TO_RAD  * (m_rotation)) * m_speed,
-		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
+	steering fleeSteering;
+	fleeSteering.linear = m_velocity;
+	fleeSteering.angular = 0.0;
+	return fleeSteering;
 }
 
-void Enemy::seek(sf::Vector2f playerPos) {
+steering Enemy::seek(sf::Vector2f playerPos) {
+	
 	m_velocity = playerPos - m_position;
 	startCalc();
 	m_sprite.setRotation(m_rotation);
 
-	m_position = sf::Vector2f(m_position.x + std::cos(DEG_TO_RAD  * (m_rotation)) * m_speed,
-		m_position.y + std::sin(DEG_TO_RAD * (m_rotation)) * m_speed);
+	steering seekSteering;
+	seekSteering.linear = m_velocity;
+	seekSteering.angular = 0.0;
+	return seekSteering;
 }
 
-void Enemy::arrive(sf::Vector2f playerPos) {
+steering Enemy::arrive(sf::Vector2f playerPos) {
 	m_velocity = playerPos - m_position;
 	m_velocity = sf::Vector2f(m_velocity.x / TIME_TO_TARGET, m_velocity.y / TIME_TO_TARGET);
 	if (mag(m_velocity) > MAX_FORWARD_SPEED) {
@@ -135,7 +144,10 @@ void Enemy::arrive(sf::Vector2f playerPos) {
 	}
 	m_rotation = getNewRotation(m_rotation, m_velocity);
 	m_sprite.setRotation(m_rotation);
-	
+	steering arriveSteer;
+	arriveSteer.linear = m_velocity;
+	arriveSteer.angular = 0.0;
+	return arriveSteer;
 }
 
 bool Enemy::avoid(std::vector<sf::Vector2f *> enemies)

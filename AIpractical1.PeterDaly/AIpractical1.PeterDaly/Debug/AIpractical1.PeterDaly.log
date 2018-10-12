@@ -1,22 +1,11 @@
-﻿  Enemy.cpp
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(5): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(9): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(14): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(18): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(19): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(103): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(102): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(106): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(107): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(117): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(116): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(126): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(125): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(157): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(158): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\enemy.cpp(184): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  game.cpp
-c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\game.cpp(3): warning C4244: 'initializing': conversion from 'double' to 'sf::Int32', possible loss of data
-  main.cpp
-  Generating Code...
+﻿  Player.cpp
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(29): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(34): warning C4305: '-=': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(47): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(50): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(56): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(59): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\aipractical1.peterdaly\aipractical1.peterdaly\player.cpp(62): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   AIpractical1.PeterDaly.vcxproj -> C:\Users\gameuser\Desktop\College\A.I\AIpractical1.PeterDaly\Debug\AIpractical1.PeterDaly.exe

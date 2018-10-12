@@ -30,8 +30,8 @@ void Player::update()
 	}
 	if (m_keys.isKeyPressed(sf::Keyboard::Down))
 	{
-		if(m_speed < MAX_BACKWARD_SPEED)
-			m_speed -= 0.15;
+		if(m_speed > MAX_BACKWARD_SPEED)
+			m_speed -= 0.05;
 	}
 	if (m_keys.isKeyPressed(sf::Keyboard::Left))
 	{
@@ -49,17 +49,17 @@ void Player::update()
 	
 	m_speed *= 0.999;
 
-	if (m_position.y > 2160) {
+	if (m_position.y > 2360) {
 		m_position.y = 0 - (m_sprite.getLocalBounds().height * 0.5);
 	}
-	else if (m_position.x > 3840) {
+	else if (m_position.x > 4040) {
 		m_position.x = 0 - (m_sprite.getLocalBounds().width * 0.5);
 	}
 	else if (m_position.y < -200) {
-		m_position.y = 1080 + (m_sprite.getLocalBounds().height * 0.5);
+		m_position.y = 2160 + (m_sprite.getLocalBounds().height * 0.5);
 	}
 	else if (m_position.x < -200) {
-		m_position.x = 2048 + (m_sprite.getLocalBounds().width * 0.5);
+		m_position.x = 3840 + (m_sprite.getLocalBounds().width * 0.5);
 	}
 }
 
