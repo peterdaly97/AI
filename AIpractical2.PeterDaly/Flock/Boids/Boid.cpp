@@ -248,11 +248,31 @@ void Boid::swarm(vector <Boid> v)
 			force = force + R*U
 */
 	Pvector	R;
+	float D;
+	float U;
+	const float A = 100.0f;
+	const float B = 7000.0f;
+	const float N = 1.0f;
+	const float M = 2.0f;
+	int count = 0;
 	Pvector sum(0, 0);
-
-// Your code here..
-
+	for (Boid boid : v) {
+		R = R.subTwoVector(location, boid.location);
+		float D = R.magnitude();
+		if (D > 0) {
+			U = -A / std::powf(D, N) + B / std::powf(D, M);
+			R.normalize();
+			R.mulScalar(U);
+			sum.addVector(R);
+			count++;
+			
+		}
+	}
+	if (count > 0) {
+		sum.divScalar(count);
+	}
 	applyForce(sum);
+// Your code here..
 	update();
 	borders();
 }
