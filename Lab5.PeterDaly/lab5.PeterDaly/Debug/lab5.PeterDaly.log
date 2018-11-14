@@ -1,0 +1,27 @@
+﻿  Enemy.cpp
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(5): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(10): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(87): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(86): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(105): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(106): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(169): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(170): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\enemy.cpp(196): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  game.cpp
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\game.cpp(3): warning C4244: 'initializing': conversion from 'double' to 'sf::Int32', possible loss of data
+  main.cpp
+  Player.cpp
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(29): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(34): warning C4305: '-=': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(47): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(50): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(56): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(59): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab5.peterdaly\lab5.peterdaly\player.cpp(62): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  lab5.PeterDaly.vcxproj -> C:\Users\gameuser\Desktop\College\A.I\Lab5.PeterDaly\lab5.PeterDaly\Debug\lab5.PeterDaly.exe
