@@ -26,9 +26,15 @@ public:
 	int m_integration = 0;
 	sf::RectangleShape m_tile;
 
-private:
+	sf::RectangleShape m_line;
+
+	void setLine(float rot);
+	
 	int m_width = 50;
 	int m_height = 50;
+
+private:
+	
 	sf::Text m_text;
 	
 	

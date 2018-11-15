@@ -98,26 +98,59 @@ void Grid::heatMap(Tile * tile, int x, int y, int cost) {
 		&& m_grid[x + 1][y]->m_cost == 0) {
 
 		m_grid[x + 1][y]->setCost(cost);
+		m_grid[x + 1][y]->setLine(180.0);
 		pq.push_back(m_grid[x + 1][y]);
 	}
 	if (x > 0 && !m_grid[x - 1][y]->m_start && !m_grid[x - 1][y]->m_obstacle
 		&& m_grid[x - 1][y]->m_cost == 0) {
 
 		m_grid[x - 1][y]->setCost(cost);
+		m_grid[x - 1][y]->setLine(0.0);
 		pq.push_back(m_grid[x - 1][y]);
 	}
 	if (y < 19 && !m_grid[x][y + 1]->m_start && !m_grid[x][y + 1]->m_obstacle
 		&& m_grid[x][y + 1]->m_cost == 0) {
 
 		m_grid[x][y + 1]->setCost(cost);
+		m_grid[x][y + 1]->setLine(270.0);
 		pq.push_back(m_grid[x][y + 1]);
 	}
 	if (y > 0 && !m_grid[x][y - 1]->m_start && !m_grid[x][y - 1]->m_obstacle
 		&& m_grid[x][y - 1]->m_cost == 0) {
 
 		m_grid[x][y - 1]->setCost(cost);
+		m_grid[x][y - 1]->setLine(90.0);
 		pq.push_back(m_grid[x][y - 1]);
 	}	
+
+	if (y > 0 && x > 0 && !m_grid[x - 1][y - 1]->m_start && !m_grid[x - 1][y - 1]->m_obstacle
+		&& m_grid[x - 1][y - 1]->m_cost == 0) {
+
+		m_grid[x - 1][y - 1]->setCost(cost);
+		m_grid[x - 1][y - 1]->setLine(45.0);
+		pq.push_back(m_grid[x - 1][y - 1]);
+	}
+	if (y < 19 && x > 0 && !m_grid[x - 1][y + 1]->m_start && !m_grid[x - 1][y + 1]->m_obstacle
+		&& m_grid[x - 1][y + 1]->m_cost == 0) {
+
+		m_grid[x - 1][y + 1]->setCost(cost);
+		m_grid[x - 1][y + 1]->setLine(315.0);
+		pq.push_back(m_grid[x - 1][y + 1]);
+	}
+	if (y > 0 && x < 29 && !m_grid[x + 1][y - 1]->m_start && !m_grid[x + 1][y - 1]->m_obstacle
+		&& m_grid[x + 1][y - 1]->m_cost == 0) {
+
+		m_grid[x + 1][y - 1]->setCost(cost);
+		m_grid[x + 1][y - 1]->setLine(135.0);
+		pq.push_back(m_grid[x + 1][y - 1]);
+	}
+	if (y < 19 && x < 29 && !m_grid[x + 1][y + 1]->m_start && !m_grid[x + 1][y + 1]->m_obstacle
+		&& m_grid[x + 1][y + 1]->m_cost == 0) {
+
+		m_grid[x + 1][y + 1]->setCost(cost);
+		m_grid[x + 1][y + 1]->setLine(225.0);
+		pq.push_back(m_grid[x + 1][y + 1]);
+	}
 
 	qq.push_back(std::pair<std::vector<Tile*>, int>(pq, cost + 1));
 	pq.clear();
