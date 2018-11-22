@@ -1,5 +1,8 @@
-﻿  grid.cpp
-c:\users\gameuser\desktop\college\a.i\lab6.peterdaly\grid.cpp(11): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\gameuser\desktop\college\a.i\lab6.peterdaly\grid.cpp(112): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\gameuser\desktop\college\a.i\lab6.peterdaly\grid.cpp(111): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  Lab6.PeterDaly.vcxproj -> C:\Users\gameuser\Desktop\College\A.I\Lab6.PeterDaly\Debug\Lab6.PeterDaly.exe
+﻿  game.cpp
+c:\users\peter\desktop\college\ai\lab6.peterdaly\game.cpp(3): warning C4244: 'initializing': conversion from 'double' to 'sf::Int32', possible loss of data
+c:\users\peter\desktop\college\ai\lab6.peterdaly\game.cpp(19): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\peter\desktop\college\ai\lab6.peterdaly\game.cpp(20): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\peter\desktop\college\ai\lab6.peterdaly\game.cpp(21): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
+c:\users\peter\desktop\college\ai\lab6.peterdaly\game.cpp(45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\peter\desktop\college\ai\lab6.peterdaly\game.cpp(46): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Lab6.PeterDaly.vcxproj -> C:\Users\peter\Desktop\College\AI\Lab6.PeterDaly\Debug\Lab6.PeterDaly.exe

@@ -9,9 +9,25 @@ Game::Game() : m_window(sf::VideoMode(1800, 1500), "AI") {
 	std::string clearText = "Clear Grid";
 	m_buttonClear = new Button(&clearText, new sf::Vector2f(1600, 100), &grid.m_font);
 	std::string costText = "Toggle Cost";
-	m_buttonCost = new Button(&costText, new sf::Vector2f(1600, 400), &grid.m_font);
+	m_buttonCost = new Button(&costText, new sf::Vector2f(1600, 300), &grid.m_font);
 	std::string vectorText = "Toggle Vector";
-	m_buttonVector = new Button(&vectorText, new sf::Vector2f(1600, 700), &grid.m_font);
+	m_buttonVector = new Button(&vectorText, new sf::Vector2f(1600, 500), &grid.m_font);
+
+	lmbText.setFont(grid.m_font);
+	rmbText.setFont(grid.m_font);
+	mmbText.setFont(grid.m_font);
+	lmbText.setCharacterSize(16.0f);
+	rmbText.setCharacterSize(16.0f);
+	mmbText.setCharacterSize(16.0f);
+	lmbText.setFillColor(sf::Color(255, 255, 255, 255));
+	rmbText.setFillColor(sf::Color(255, 255, 255, 255));
+	mmbText.setFillColor(sf::Color(255, 255, 255, 255));
+	lmbText.setPosition(sf::Vector2f(1520, 700));
+	rmbText.setPosition(sf::Vector2f(1520, 800));
+	mmbText.setPosition(sf::Vector2f(1520, 900));
+	lmbText.setString("Left Mouse Button to select start");
+	rmbText.setString("Right Mouse Button to select end");
+	mmbText.setString("Middle Mouse Button to place obstacle");
 }
 
 Game::~Game() {
@@ -63,6 +79,9 @@ void Game::render() {
 	m_buttonClear->render(m_window);
 	m_buttonCost->render(m_window);
 	m_buttonVector->render(m_window);
+	m_window.draw(lmbText);
+	m_window.draw(rmbText);
+	m_window.draw(mmbText);
 	m_window.display();
 
 }

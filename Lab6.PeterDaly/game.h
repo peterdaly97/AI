@@ -34,6 +34,10 @@ private:
 	Button* m_buttonVector;
 
 	sf::Vector2f mousePos;
+
+	sf::Text lmbText;
+	sf::Text rmbText;
+	sf::Text mmbText;
 };
 
 #endif //!GAME_H
