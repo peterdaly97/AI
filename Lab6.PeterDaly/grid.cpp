@@ -8,11 +8,9 @@ Grid::Grid() {
 
 	for (int i = 0; i < m_height; i++) {
 		for (int e = 0; e < m_width; e++) {
-			m_grid[e][i] = new Tile(sf::Vector2f(50 * e, 50 * i), &m_font);
+			m_grid[e][i] = new Tile(sf::Vector2f(30 * e, 30 * i), &m_font);
 		}
 	}
-
-	initObstacles();
 
 }
 
@@ -26,6 +24,11 @@ void Grid::update() {
 			m_grid[e][i]->update();
 		}
 	}
+
+	if (m_start && m_end && !m_startCalc) {
+		m_startCalc = true;
+		setUpHeatMap();
+	}
 }
 
 void Grid::render(sf::RenderWindow * window) {
@@ -36,20 +39,44 @@ void Grid::render(sf::RenderWindow * window) {
 	}
 }
 
-void Grid::select(sf::Vector2f pos) {
+void Grid::selectLeft(sf::Vector2f pos) {
 	if (!m_start && !m_grid[(int)pos.x][(int)pos.y]->m_end && 
 		!m_grid[(int)pos.x][(int)pos.y]->m_obstacle) {
 		m_start = true;
 		m_grid[(int)pos.x][(int)pos.y]->m_start = true;
 	}
-	else if (!m_end && !m_grid[(int)pos.x][(int)pos.y]->m_start && 
+		
+}
+
+void Grid::selectRight(sf::Vector2f pos) {
+	if (!m_end && !m_grid[(int)pos.x][(int)pos.y]->m_start &&
 		!m_grid[(int)pos.x][(int)pos.y]->m_obstacle) {
 		m_end = true;
 		m_grid[(int)pos.x][(int)pos.y]->m_end = true;
-		 
-		m_startCalc = true;
+
 	}
-		
+
+}
+
+void Grid::selectMiddle(sf::Vector2f pos) {
+	if (!m_grid[(int)pos.x][(int)pos.y]->m_start && 
+		!m_grid[(int)pos.x][(int)pos.y]->m_end &&
+		!m_grid[(int)pos.x][(int)pos.y]->m_obstacle) {
+
+		m_grid[(int)pos.x][(int)pos.y]->m_obstacle = true;
+
+		if (m_start && m_end) {
+			m_startCalc = false;
+			for (int i = 0; i < m_height; i++) {
+				for (int e = 0; e < m_width; e++) {
+					m_grid[e][i]->m_marked = false;
+					m_grid[e][i]->m_path = false;
+				}
+			}
+
+		}
+	}
+
 }
 
 void Grid::setUpHeatMap() {
@@ -74,16 +101,15 @@ void Grid::setUpHeatMap() {
 	int cost = 0;
 	qq.push_back(std::pair<std::vector<Tile*>, int>(pq, cost + 1));
 	heatLoop();
-	
-	m_startCalc = false;
+
 }
 
 void Grid::heatLoop() {
 	for (std::pair<std::vector<Tile*>, int> nextPQ : qq) {
 		nextPQ = *qq.begin();
 		for (Tile * p : nextPQ.first) {
-			heatMap(p, p->m_tile.getPosition().x / 50,
-				p->m_tile.getPosition().y / 50, nextPQ.second);
+			heatMap(p, p->m_tile.getPosition().x / 30,
+				p->m_tile.getPosition().y / 30, nextPQ.second);
 		}
 		qq.erase(qq.begin());
 	
@@ -91,102 +117,136 @@ void Grid::heatLoop() {
 
 	if (qq.size() > 0)
 		heatLoop();
+
+	makePath();
+}
+
+void Grid::setUpNode(int x, int y, int xAdd, int yAdd, int cost, float angle) {
+	int newX = x + xAdd;
+	int newY = y + yAdd;
+
+	m_grid[newX][newY]->setCost(cost);
+	m_grid[newX][newY]->setLine(angle);
+	m_grid[newX][newY]->m_marked = true;
+	m_grid[newX][newY]->m_pathNode = std::make_pair(x, y);
+	pq.push_back(m_grid[newX][newY]);
 }
 
 void Grid::heatMap(Tile * tile, int x, int y, int cost) {
-	if (x < 29 && !m_grid[x + 1][y]->m_start && !m_grid[x + 1][y]->m_obstacle
-		&& m_grid[x + 1][y]->m_cost == 0) {
 
-		m_grid[x + 1][y]->setCost(cost);
-		m_grid[x + 1][y]->setLine(180.0);
-		pq.push_back(m_grid[x + 1][y]);
+	if (x < 49 && !m_grid[x + 1][y]->m_start && !m_grid[x + 1][y]->m_obstacle
+		&& !m_grid[x + 1][y]->m_marked) {
+		
+		setUpNode(x, y, 1, 0, cost, 0.0);
 	}
 	if (x > 0 && !m_grid[x - 1][y]->m_start && !m_grid[x - 1][y]->m_obstacle
-		&& m_grid[x - 1][y]->m_cost == 0) {
+		&& !m_grid[x - 1][y]->m_marked) {
 
-		m_grid[x - 1][y]->setCost(cost);
-		m_grid[x - 1][y]->setLine(0.0);
-		pq.push_back(m_grid[x - 1][y]);
+		setUpNode(x, y, -1, 0, cost, 180.0);
 	}
-	if (y < 19 && !m_grid[x][y + 1]->m_start && !m_grid[x][y + 1]->m_obstacle
-		&& m_grid[x][y + 1]->m_cost == 0) {
+	if (y < 49 && !m_grid[x][y + 1]->m_start && !m_grid[x][y + 1]->m_obstacle
+		&& !m_grid[x][y + 1]->m_marked) {
 
-		m_grid[x][y + 1]->setCost(cost);
-		m_grid[x][y + 1]->setLine(270.0);
-		pq.push_back(m_grid[x][y + 1]);
+		setUpNode(x, y, 0, 1, cost, 90.0);
 	}
 	if (y > 0 && !m_grid[x][y - 1]->m_start && !m_grid[x][y - 1]->m_obstacle
-		&& m_grid[x][y - 1]->m_cost == 0) {
+		&& !m_grid[x][y - 1]->m_marked) {
 
-		m_grid[x][y - 1]->setCost(cost);
-		m_grid[x][y - 1]->setLine(90.0);
-		pq.push_back(m_grid[x][y - 1]);
+		setUpNode(x, y, 0, -1, cost, 270.0);
 	}	
 
 	if (y > 0 && x > 0 && !m_grid[x - 1][y - 1]->m_start && !m_grid[x - 1][y - 1]->m_obstacle
-		&& m_grid[x - 1][y - 1]->m_cost == 0) {
+		&& !m_grid[x - 1][y - 1]->m_marked) {
 
-		m_grid[x - 1][y - 1]->setCost(cost);
-		m_grid[x - 1][y - 1]->setLine(45.0);
-		pq.push_back(m_grid[x - 1][y - 1]);
+		setUpNode(x, y, -1, -1, cost, 225.0);
 	}
-	if (y < 19 && x > 0 && !m_grid[x - 1][y + 1]->m_start && !m_grid[x - 1][y + 1]->m_obstacle
-		&& m_grid[x - 1][y + 1]->m_cost == 0) {
+	if (y < 49 && x > 0 && !m_grid[x - 1][y + 1]->m_start && !m_grid[x - 1][y + 1]->m_obstacle
+		&& !m_grid[x - 1][y + 1]->m_marked) {
 
-		m_grid[x - 1][y + 1]->setCost(cost);
-		m_grid[x - 1][y + 1]->setLine(315.0);
-		pq.push_back(m_grid[x - 1][y + 1]);
+		setUpNode(x, y, -1, 1, cost, 135.0);
 	}
-	if (y > 0 && x < 29 && !m_grid[x + 1][y - 1]->m_start && !m_grid[x + 1][y - 1]->m_obstacle
-		&& m_grid[x + 1][y - 1]->m_cost == 0) {
+	if (y > 0 && x < 49 && !m_grid[x + 1][y - 1]->m_start && !m_grid[x + 1][y - 1]->m_obstacle
+		&& !m_grid[x + 1][y - 1]->m_marked) {
 
-		m_grid[x + 1][y - 1]->setCost(cost);
-		m_grid[x + 1][y - 1]->setLine(135.0);
-		pq.push_back(m_grid[x + 1][y - 1]);
+		setUpNode(x, y, 1, -1, cost, 315.0);
 	}
-	if (y < 19 && x < 29 && !m_grid[x + 1][y + 1]->m_start && !m_grid[x + 1][y + 1]->m_obstacle
-		&& m_grid[x + 1][y + 1]->m_cost == 0) {
+	if (y < 49 && x < 49 && !m_grid[x + 1][y + 1]->m_start && !m_grid[x + 1][y + 1]->m_obstacle
+		&& !m_grid[x + 1][y + 1]->m_marked) {
 
-		m_grid[x + 1][y + 1]->setCost(cost);
-		m_grid[x + 1][y + 1]->setLine(225.0);
-		pq.push_back(m_grid[x + 1][y + 1]);
+		setUpNode(x, y, 1, 1, cost, 45.0);
 	}
 
 	qq.push_back(std::pair<std::vector<Tile*>, int>(pq, cost + 1));
 	pq.clear();
 }
 
-void Grid::initObstacles() {
+void Grid::makePath() {
+	int startX;
+	int startY;
+	Tile* startTile = new Tile(sf::Vector2f(0, 0), &m_font);
 
-	m_grid[10][0]->m_obstacle = true;
-	m_grid[10][1]->m_obstacle = true;
-	m_grid[10][2]->m_obstacle = true;
-	m_grid[10][3]->m_obstacle = true;
-	m_grid[10][4]->m_obstacle = true;
-	m_grid[10][5]->m_obstacle = true;
-	m_grid[10][6]->m_obstacle = true;
-	m_grid[10][7]->m_obstacle = true;
-	m_grid[10][8]->m_obstacle = true;
-	m_grid[10][9]->m_obstacle = true;
-	m_grid[10][10]->m_obstacle = true;
-	m_grid[10][11]->m_obstacle = true;
-	m_grid[10][12]->m_obstacle = true;
-	m_grid[10][13]->m_obstacle = true;
+	for (int i = 0; i < m_height; i++) {
+		for (int e = 0; e < m_width; e++) {
+			if (m_grid[e][i]->m_end) {
+				startTile = m_grid[e][i];
+				startX = e;
+				startY = i;
+			}
 
-	m_grid[10][13]->m_obstacle = true;
-	m_grid[11][13]->m_obstacle = true;
-	m_grid[12][13]->m_obstacle = true;
-	m_grid[13][13]->m_obstacle = true;
-	m_grid[14][13]->m_obstacle = true;
-	m_grid[15][13]->m_obstacle = true;
-	m_grid[16][13]->m_obstacle = true;
-	m_grid[17][13]->m_obstacle = true;
+		}
+	}
 
-	m_grid[17][12]->m_obstacle = true;
-	m_grid[17][11]->m_obstacle = true;
-	m_grid[17][10]->m_obstacle = true;
-	m_grid[17][9]->m_obstacle = true;
-	m_grid[17][8]->m_obstacle = true;
-	m_grid[17][7]->m_obstacle = true;
+	while (!startTile->m_start && startTile->m_pathNode.first > -1) {
+		startTile->m_path = true;
+		startTile = m_grid[startTile->m_pathNode.first][ startTile->m_pathNode.second];
+	}
 }
+
+void Grid::toggleCost() {
+	if (m_toggleCost)
+		m_toggleCost = false;
+	else
+		m_toggleCost = true;
+
+	for (int i = 0; i < m_height; i++) {
+		for (int e = 0; e < m_width; e++) {
+			m_grid[e][i]->m_toggleCost = m_toggleCost;
+		}
+	}
+}
+
+void Grid::toggleVector() {
+	if (m_toggleVector)
+		m_toggleVector = false;
+	else
+		m_toggleVector = true;
+
+	for (int i = 0; i < m_height; i++) {
+		for (int e = 0; e < m_width; e++) {
+			m_grid[e][i]->m_toggleVector = m_toggleVector;
+		}
+	}
+}
+
+void Grid::clearGrid() {
+	m_start = false;
+	m_end = false;
+	m_startCalc = false;
+	for (int i = 0; i < m_height; i++) {
+		for (int e = 0; e < m_width; e++) {
+			m_grid[e][i]->m_cost = 0;
+			m_grid[e][i]->m_start = false;
+			m_grid[e][i]->m_end = false;
+			m_grid[e][i]->m_path = false;
+			m_grid[e][i]->m_obstacle = false;
+			m_grid[e][i]->m_marked = false;
+			m_grid[e][i]->m_pathNode.first = -1;
+			m_grid[e][i]->m_line.setRotation(0);
+			m_grid[e][i]->m_line.setFillColor(sf::Color::White);
+			m_grid[e][i]->m_line.setOutlineColor(sf::Color::White);
+			
+		}
+	}
+}
+
 

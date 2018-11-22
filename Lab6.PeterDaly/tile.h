@@ -21,6 +21,7 @@ public:
 
 	bool m_start = false;
 	bool m_end = false;
+	bool m_path = false;
 
 	int m_cost = 0;
 	int m_integration = 0;
@@ -30,8 +31,15 @@ public:
 
 	void setLine(float rot);
 	
-	int m_width = 50;
-	int m_height = 50;
+	int m_width = 30;
+	int m_height = 30;
+
+	std::pair<int, int> m_pathNode;
+
+	bool m_toggleCost = true;
+	bool m_toggleVector = true;
+
+	bool m_marked = false;
 
 private:
 	

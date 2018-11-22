@@ -1,4 +1,5 @@
-﻿  tile.cpp
-c:\users\peter\desktop\college\ai\lab6.peterdaly\tile.cpp(4): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\peter\desktop\college\ai\lab6.peterdaly\tile.cpp(15): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-  Lab6.PeterDaly.vcxproj -> C:\Users\peter\Desktop\College\AI\Lab6.PeterDaly\Debug\Lab6.PeterDaly.exe
+﻿  grid.cpp
+c:\users\gameuser\desktop\college\a.i\lab6.peterdaly\grid.cpp(11): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab6.peterdaly\grid.cpp(112): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\gameuser\desktop\college\a.i\lab6.peterdaly\grid.cpp(111): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Lab6.PeterDaly.vcxproj -> C:\Users\gameuser\Desktop\College\A.I\Lab6.PeterDaly\Debug\Lab6.PeterDaly.exe

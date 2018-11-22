@@ -3,6 +3,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "grid.h"
+#include "Button.h"
 
 class Game
 {
@@ -28,6 +29,11 @@ private:
 	int x = 0;
 	int y = 0;
 
+	Button* m_buttonClear;
+	Button* m_buttonCost;
+	Button* m_buttonVector;
+
+	sf::Vector2f mousePos;
 };
 
 #endif //!GAME_H
